@@ -34,12 +34,20 @@
             drag-class="card-ghost"
             drop-class="card-ghost-drop"
             >
-            <Draggable v-for="card in column.children" :key="card.id">
-              <div :class="card.props.className" :style="card.props.style">
+             <Draggable>
+              <!-- <div :class="card.props.className" :style="card.props.style">
                 <p>
                   {{card.data}}
                 </p>
-              </div>
+              </div> -->
+              <transition-group name="fade" tag="ul" class="tasks__list no-bullet">
+                <task-item v-for="(task, index) in tasks"
+                @remove="removeTask(index)"
+                @complete="completeTask(task)"
+                :task="task"
+                :key="index"
+                ></task-item>
+              </transition-group>
             </Draggable>
           </Container>
         </div>
@@ -53,7 +61,8 @@
 <script>
 
   // import AppLogo from '~/components/AppLogo.vue'
-  import TaskList from '~/components/TaskList.vue'
+  import TaskList from '~/components/TaskList';
+  import TaskItem from '~/components/TaskItem';
   import { Container, Draggable } from "vue-smooth-dnd";
   import { applyDrag, generateItems } from "./utils";
 
@@ -79,6 +88,7 @@
     const rand = Math.floor(Math.random() * 10);
     return cardColors[rand];
   };
+
 
   const scene = {
     type: "container",
@@ -110,6 +120,7 @@
     name: "Cards",
     components: {
       TaskList,
+      TaskItem,
       Container, 
       Draggable
     },
@@ -117,12 +128,12 @@
       return {
         tasks: [{
           title: 'Make todo list',
-          completed: true
+          completed: false
         }, {
           title: 'Go skydiving',
           completed: false
         }],
-        // items: generateItems(50, i => ({ id: i, data: "Draggable " + i }))
+        // items: generateItems(50, i => ({ id: i, data: "Draggable " + i })),
         scene
       }
     },

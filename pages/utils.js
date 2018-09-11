@@ -17,6 +17,22 @@ export const applyDrag = (arr, dragResult) => {
   return result
 };
 
+const task = [{
+  title: 'Make todo list',
+  completed: false
+}, {
+  title: 'Go skydiving',
+  completed: false
+}];
+
+export const className = () => {
+      var classes = ['tasks__item__toggle'];
+      if (this.task.completed) {
+        classes.push('tasks__item__toggle--completed');
+      }
+      return classes.join(' ');
+    }
+
 export const generateItems = (count, creator) => {
   const result = []
   for (let i = 0; i < count; i++) {
