@@ -12,7 +12,7 @@
           </Draggable>
         </Container>
       </div> -->
-      <div class="card-scene">
+     <!--  <div class="card-scene">
         <Container 
         orientation="horizontal" 
         @drop="onColumnDrop($event)"
@@ -34,12 +34,12 @@
             drag-class="card-ghost"
             drop-class="card-ghost-drop"
             >
-             <Draggable>
-              <!-- <div :class="card.props.className" :style="card.props.style">
+             <Draggable v-for="card in column.children" :key="card.id">
+              <div :class="card.props.className" :style="card.props.style">
                 <p>
                   {{card.data}}
                 </p>
-              </div> -->
+              </div>
               <transition-group name="fade" tag="ul" class="tasks__list no-bullet">
                 <task-item v-for="(task, index) in tasks"
                 @remove="removeTask(index)"
@@ -53,7 +53,7 @@
         </div>
       </Draggable>
     </Container>
-  </div>
+  </div> -->
 </div>
 </section>
 </template>
@@ -127,9 +127,11 @@
     data() {
       return {
         tasks: [{
+          id: 1,
           title: 'Make todo list',
           completed: false
         }, {
+          id: 2,
           title: 'Go skydiving',
           completed: false
         }],
@@ -196,10 +198,11 @@ button {
   opacity: 0;
 }
 .tasks {
-  width: 100%;
-  max-width: 45rem;
+  display: inline-block;
+  /*width: 100%;*/
+  max-width: 300px;
   padding: 1em;
-  margin: 1em auto;
+  /*margin: 1em auto;*/
   overflow: auto;
   background-color: #fff;
   box-shadow: 0px 0.25rem 1rem rgba(0,0,0,0.25);
@@ -513,8 +516,8 @@ button {
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  /*margin-top: 50px;
+  margin-bottom: 50px;*/
 }
 
 .simple-page-scroller{
