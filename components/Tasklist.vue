@@ -1,94 +1,62 @@
-<template id="task-list">
-  <div>
-    <section class="tasks">
-      <h1>
-        Tasks 
-        <transition name="fade">
-          <small v-if="incomplete">({{ incomplete }})</small>
-        </transition>
+<template>
+  <div  id="task-list">
 
-      </h1>
-      <div class="tasks__new input-group">
-        <input type="text"
-        class="input-group-field"
-        v-model="newTask"
-        @keyup.enter="addTask"
-        placeholder="New task"
-        >
-        <span class="input-group-button">
-          <button @click="addTask" 
-          class="button"
-          >
-          <i class="fa fa-plus"></i> Add
-        </button>
-      </span>
+
+    <div class="tasks" v-for="(col, index) in someTasks" :key="col.id">
+      <!-- <Draggable> -->
+        <h1>
+          {{ col.columnName }}
+          <transition name="fade">
+            <small v-if="incomplete">({{ col.taskBody.length }} - {{ col.id }})</small>
+          </transition>
+        </h1>
+        <my-input :parentID="col.id" :index="index"></my-input>
+          <hr>
+
+<Container >    
+            <task-item 
+              v-for="(task, index) in col.taskBody"  
+              :key="index"
+              :task="task"
+              :index="index"
+              :colid="col.id"
+            ></task-item>
+
+</Container>
+      <!-- </Draggable> -->
     </div>
-
-    <div class="tasks__clear button-group pull-right">
-      <button class="button warning small"
-      @click="clearCompleted"
-      >
-      <i class="fa fa-check"></i> Clear Completed
-    </button>
-    <button class="button alert small"
-    @click="clearAll"
-    >
-    <i class="fa fa-trash"></i> Clear All
-  </button>
-</div>
-
-<transition-group name="fade" tag="ul" class="tasks__list no-bullet">
-  <task-item v-for="(task, index) in tasks"
-  @remove="removeTask(index)"
-  @complete="completeTask(task)"
-  :task="task"
-  :key="index"
-  ></task-item>
-</transition-group>
-</section>
-</div>
+  </div>
 </template>
 <script>
   import TaskItem from '~/components/TaskItem.vue'
+  import MyInput from '~/components/MyInput.vue'
+  import { Container, Draggable } from "vue-smooth-dnd"
+  import { applyDrag, generateItems } from "./utils"
+
   export default {
     components: {
-      TaskItem
+      TaskItem,
+      MyInput,
+      Container, 
+      Draggable
     },
-    props: {
-      tasks: { default: [] }
+    created(){
     },
     data() {
       return {
-        newTask: ''
+        className: '',
+        someTasksInner: this.$store.state.columnTasks[2]['taskBody'],
+        someTasks: this.$store.state.columnTasks
       };
     },
-
     computed: {
       incomplete() {
-        return this.tasks.filter(this.inProgress).length;
-      }
+        return this.someTasksInner.filter(this.inProgress).length;
+      },
     },
     methods: {
-      addTask() {
-        if (this.newTask) {
-          this.tasks.push({
-            title: this.newTask,
-            completed: false
-          });
-          this.newTask = '';
-        }
-      },
-      completeTask(task) {
-        task.completed = !task.completed;
-      },
-      removeTask(index) {
-        this.tasks.splice(index, 1);
-      },
-      clearCompleted() {
-        this.tasks = this.tasks.filter(this.inProgress);
-      },
-      clearAll() {
-        this.tasks = [];
+      onDrop: function(dropResult) {
+        this.someTasksInner = applyDrag(this.someTasksInner, dropResult);
       },
       inProgress(task) {
         return !this.isCompleted(task);
@@ -97,5 +65,5 @@
         return task.completed;
       }
     }
-  }
+  };
 </script>
