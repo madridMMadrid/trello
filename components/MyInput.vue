@@ -5,7 +5,7 @@
 			class="input-group-field"
 			v-model="myInput"
 			@keyup.enter="addTask"
-			placeholder="New task"
+			placeholder="Добавить таск"
 			>
 			<span class="input-group-button">
 				<button @click="addTask" 

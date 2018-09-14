@@ -3,7 +3,7 @@
 		<button 
 			:class="!task.completed ? 'tasks__item__toggle' : 'tasks__item__toggle tasks__item__toggle--completed'"
 			@click.self="completeTask(task)" >
-			{{ task.title }} - {{ task.completed }}
+			{{ task.title }}
 		</button>
 		<button class="tasks__item__remove button alert pull-right"
 			@click="removeTask(index)">
@@ -36,10 +36,8 @@ export default {
 			}
 			return classes.join(' ');
 		},
-
 	},
 	created(){
-		// console.log(this.complit);
 	},
 	methods: {
 		onDrop: function(dropResult) {

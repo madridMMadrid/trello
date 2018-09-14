@@ -59,6 +59,20 @@ const createStore = () => {
             })
           }
         }
+      },
+      addColumn(state, res) {
+        for (var i = 0; i < state.columnTasks.length; i++) {
+              var number = [] 
+              number.push(state.columnTasks[i].id)
+              var max = Math.max(number)
+        }
+
+         state.columnTasks.push({
+                id: max + 1,
+                columnName: res.columnName,
+                taskBody: []
+            })
+            console.log(max);
       }
     },
 

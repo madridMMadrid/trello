@@ -1,19 +1,16 @@
 <template>
   <div  id="task-list">
-
-
     <div class="tasks" v-for="(col, index) in someTasks" :key="col.id">
-      <!-- <Draggable> -->
-        <h1>
+        <h5>
           {{ col.columnName }}
           <transition name="fade">
-            <small v-if="incomplete">({{ col.taskBody.length }} - {{ col.id }})</small>
+            <small v-if="incomplete">({{ col.taskBody.length }})</small>
           </transition>
-        </h1>
+        </h5>
         <my-input :parentID="col.id" :index="index"></my-input>
           <hr>
 
-<Container >    
+          <Container >    
             <task-item 
               v-for="(task, index) in col.taskBody"  
               :key="index"
@@ -21,10 +18,29 @@
               :index="index"
               :colid="col.id"
             ></task-item>
-
-</Container>
-      <!-- </Draggable> -->
+          </Container>
     </div>
+
+
+    <div class="tasks">
+      <div class="tasks__new input-group">
+      <input type="text"
+      class="input-group-field"
+      v-model="newColumn"
+      @keyup.enter="addColumn"
+      placeholder="Добавить колонку"
+      >
+      <span class="input-group-button">
+        <button 
+          @click="addColumn" 
+          class="button"
+          >
+          <i class="fa fa-plus"></i> Add Col
+        </button>
+      </span>
+    </div>
+    </div>
+
   </div>
 </template>
 <script>
@@ -45,6 +61,7 @@
     data() {
       return {
         className: '',
+        newColumn: '',
         someTasksInner: this.$store.state.columnTasks[2]['taskBody'],
         someTasks: this.$store.state.columnTasks
       };
@@ -55,6 +72,12 @@
       },
     },
     methods: {
+      addColumn(){
+        if (this.newColumn) {
+          this.$store.commit('addColumn', {columnName: this.newColumn})
+          this.newColumn = '';
+        }
+      },
       onDrop: function(dropResult) {
         this.someTasksInner = applyDrag(this.someTasksInner, dropResult);
       },
