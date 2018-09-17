@@ -1,41 +1,94 @@
 import Vuex from 'vuex'
 
+
 const createStore = () => {
   return new Vuex.Store({
     state: {
-      column: 4,
-      columnNames: ["Lorem", "Ipsum", "Consectetur", "Eiusmod"],
-    //   test: {
-    //     type: "container",
-    //     props: {
-    //       orientation: "horizontal"
-    //     },
-    //     children: generateItems(4, i => ({
-    //       id: `column${i}`,
-    //       type: "container",
-    //       name: state.columnNames[i],
-    //       props: {
-    //         orientation: "vertical",
-    //         className: "card-container"
-    //       },
-    //       children: generateItems(1, j => ({
-    //         type: "draggable",
-    //         id: `${i}${j}`,
-    //         props: {
-    //           className: "card",
-    //         },
-    //       }))
-    //     }))
-    //   }
+      columnTasks: [{
+        id: 1,
+        columnName: 'test1',
+        taskBody: [{
+          id: 3,
+          title: 'Make todo list 1',
+          completed: false
+        }],
+      },{
+        id: 2,
+        columnName: 'test2',
+        taskBody: [{
+          id: 4,
+          title: 'Make todo list 2',
+          completed: false
+        },
+        {
+          id: 7,
+          title: 'Make todo list 7',
+          completed: false
+        }],
+      },{
+        id: 3,
+        columnName: 'test3',
+        taskBody: [{
+          id: 5,
+          title: 'Make todo list 3',
+          completed: false
+        }],
+      }],
     },
+
     mutations: {
       increment (state) {
         state.column++
       },
-      addName(state, name) {
-        state.columnNames.push(name)
+      addTask(state,res){
+
+        for (var i = 0; i < state.columnTasks.length; i++) {
+          for (var j = 0; j < state.columnTasks[i].taskBody.length; j++) {
+              var number = [] 
+              number.push(state.columnTasks[i].taskBody[j].id)
+
+              var max = Math.max(number)
+          }
+          if (state.columnTasks[i].id == res.currentID) {
+
+              state.columnTasks[i].taskBody.push({
+
+                id: max + 1,
+                title: res.title,
+                completed: false
+            })
+          }
+        }
+      },
+      addColumn(state, res) {
+        console.log(state.columnTasks);
+        for (var i = 0; i < state.columnTasks.length; i++) {
+          var number = [] 
+          number.push(state.columnTasks[i].id)
+          var max = Math.max(number)
+        }
+
+        state.columnTasks.push({
+          id: max + 1,
+          columnName: res.columnName,
+          taskBody: []
+        })
+
+            
+        console.log(max);
+      },
+      removeColumn(state, res){
+        // console.log('remove');
+        for (var i = 0; i < state.columnTasks.length; i++) {
+          if (state.columnTasks[i].id == res.id) {
+            // console.log(state.columnTasks[i]);
+            state.columnTasks.splice(i, 1)
+          }
+        }
       }
-    }
+       
+    },
+
   })
 }
 

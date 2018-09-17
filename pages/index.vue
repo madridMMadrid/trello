@@ -1,183 +1,78 @@
 <template>
-  <section class="container">
-    <div>
-      <!-- <app-logo/> -->
-      <task-list :tasks="tasks"></task-list>
-      <!-- <div class="simple-page">
-        <Container @drop="onDrop">            
-          <Draggable v-for="item in items" :key="item.id">
-            <div class="draggable-item">
-              {{item.data}}
-            </div>
-          </Draggable>
-        </Container>
-      </div> -->
-     <!--  <div class="card-scene">
-        <Container 
-        orientation="horizontal" 
-        @drop="onColumnDrop($event)"
-        drag-handle-selector=".column-drag-handle"
-        @drag-start="dragStart"
-        >
-        <Draggable v-for="column in scene.children" :key="column.id">
-          <div :class="column.props.className">
-            <div class="card-column-header">
-              <span class="column-drag-handle">&#x2630;</span>
-              {{column.name}}
-            </div>
-            <Container 
-            group-name="col"
-            @drop="(e) => onCardDrop(column.id, e)"
-            @drag-start="(e) => log('drag start', e)"
-            @drag-end="(e) => log('drag end', e)"
-            :get-child-payload="getCardPayload(column.id)"
-            drag-class="card-ghost"
-            drop-class="card-ghost-drop"
-            >
-             <Draggable v-for="card in column.children" :key="card.id">
-              <div :class="card.props.className" :style="card.props.style">
-                <p>
-                  {{card.data}}
-                </p>
-              </div>
-              <transition-group name="fade" tag="ul" class="tasks__list no-bullet">
-                <task-item v-for="(task, index) in tasks"
-                @remove="removeTask(index)"
-                @complete="completeTask(task)"
-                :task="task"
-                :key="index"
-                ></task-item>
-              </transition-group>
-            </Draggable>
-          </Container>
-        </div>
-      </Draggable>
-    </Container>
-  </div> -->
-</div>
-</section>
+  <section class="container_wrap">
+  	<div :class="navButtonClass" @click="toggleNav()">
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+  	<div :class="navigatorClass"  class="navigator"></div>
+  	<div class="content">
+  		<div class="header"></div>
+  		<div class="demo">
+  			<div class="card-scene">
+  				<div class="smooth-dnd-container horizontal">
+	  				<task-list :tasks="tasks"></task-list>  		
+  				</div>
+  			</div>
+  		</div>
+  	</div>
+  </section>
 </template>
 
 <script>
 
-  // import AppLogo from '~/components/AppLogo.vue'
   import TaskList from '~/components/TaskList';
   import TaskItem from '~/components/TaskItem';
   import { Container, Draggable } from "vue-smooth-dnd";
   import { applyDrag, generateItems } from "./utils";
 
-  const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
-
-  const columnNames = ["Lorem", "Ipsum", "Consectetur", "Eiusmod"];
-
-  const cardColors = [
-  "azure",
-  "beige",
-  "bisque",
-  "blanchedalmond",
-  "burlywood",
-  "cornsilk",
-  "gainsboro",
-  "ghostwhite",
-  "ivory",
-  "khaki"
-  ];
-  const pickColor = () => {
-    const rand = Math.floor(Math.random() * 10);
-    return cardColors[rand];
-  };
-
-
-  const scene = {
-    type: "container",
-    props: {
-      orientation: "horizontal"
-    },
-    children: generateItems(4, i => ({
-      id: `column${i}`,
-      type: "container",
-      name: columnNames[i],
-      props: {
-        orientation: "vertical",
-        className: "card-container"
-      },
-      children: generateItems(+(Math.random() * 10).toFixed() + 5, j => ({
-        type: "draggable",
-        id: `${i}${j}`,
-        props: {
-          className: "card",
-          style: { backgroundColor: pickColor() }
-        },
-        data: lorem.slice(0, Math.floor(Math.random() * 150) + 30)
-      }))
-    }))
-  };
-
 
   export default {
-    name: "Cards",
-    components: {
-      TaskList,
-      TaskItem,
-      Container, 
-      Draggable
-    },
-    data() {
-      return {
-        tasks: [{
-          id: 1,
-          title: 'Make todo list',
-          completed: false
-        }, {
-          id: 2,
-          title: 'Go skydiving',
-          completed: false
-        }],
-        // items: generateItems(50, i => ({ id: i, data: "Draggable " + i })),
-        scene
-      }
-    },
-    methods: {
-      onDrop: function(dropResult) {
-        this.items = applyDrag(this.items, dropResult);
-      },
-      onColumnDrop: function(dropResult) {
-        const scene = Object.assign({}, this.scene);
-        scene.children = applyDrag(scene.children, dropResult);
-        this.scene = scene;
-      },
+	name: "Cards",
+	components: {
+	  TaskList,
+	  TaskItem,
+	  Container, 
+	  Draggable
+	},
+	data() {
+	  return {
+		tasks: this.$store.state.tasks,
+		isNavOpen: true,
+		// createColumn: this.$store.state.columnTest
+	  }
+	},
+	created() {
+	  // console.log('createColumn');
+	},
+	methods: {
+		toggleNav: function() {
+    	  this.isNavOpen = !this.isNavOpen;
+    	},
 
-      onCardDrop: function(columnId, dropResult) {
-        if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-          const scene = Object.assign({}, this.scene);
-          const column = scene.children.filter(p => p.id === columnId)[0];
-          const columnIndex = scene.children.indexOf(column);
 
-          const newColumn = Object.assign({}, column);
-          newColumn.children = applyDrag(newColumn.children, dropResult);
-          scene.children.splice(columnIndex, 1, newColumn);
+	  getCardPayload: function(columnId) {
+		return index => {
+		  return this.scene.children.filter(p => p.id === columnId)[0].children[
+		  index
+		  ];
+		};
+	  },
 
-          this.scene = scene;
-        }
-      },
-
-      getCardPayload: function(columnId) {
-        return index => {
-          return this.scene.children.filter(p => p.id === columnId)[0].children[
-          index
-          ];
-        };
-      },
-      dragStart: function(){
-        console.log('drag started');
-      },
-      log: function(...params){
-        console.log(...params);
-      }
-    }
+	},
+	computed: {
+	    navButtonClass: function() {
+	      return `nav-button${this.isNavOpen ? " open" : " closed"}`;
+	    },
+	    navigatorClass: function() {
+	      return `navigator${this.isNavOpen ? " open" : " closed"}`;
+	    },
+	    headerClass: function() {
+	      return `header${this.isNavOpen ? " open" : " closed"}`;
+	    }
   }
+  };
 </script>
 
 <style>
@@ -189,6 +84,25 @@ h1,
 button {
   font-family: 'Nunito', sans-serif;
 }
+span.closed {
+  float: right;
+}
+span.closed:hover {
+  cursor: pointer;
+}
+
+.container_wrap {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+}
+#task-list {
+/*	display: flex;
+	-ms-align-items: start;
+	align-items: start;*/
+	display: inline-block;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
@@ -199,9 +113,11 @@ button {
 }
 .tasks {
   display: inline-block;
+  vertical-align: top;
   /*width: 100%;*/
   max-width: 300px;
   padding: 1em;
+  margin: 5px;
   /*margin: 1em auto;*/
   overflow: auto;
   background-color: #fff;
@@ -247,7 +163,7 @@ button {
   vertical-align: middle;
 }
 .nav-button{
-  display: none;
+  display: block;
   position: fixed;
   left: 10px;
   top: 20px;
@@ -423,15 +339,15 @@ button {
 
 @media (max-width: 700px) {
   .navigator {
-    position: fixed;
-    height: 100%;
-    left: 0;
-    top: 0;
-    bottom: 0;
+	position: fixed;
+	height: 100%;
+	left: 0;
+	top: 0;
+	bottom: 0;
   }
   
   .nav-button {
-    display: block;
+	display: block;
   }
 }
 
@@ -543,16 +459,16 @@ button {
 }
 
 .draggable-item-horizontal{
-    height: 300px;
-    padding: 10px;
-    line-height: 100px;
-    text-align: center;
-    /* width : 200px; */
-    display: block;
-    background-color: #fff;
-    outline: 0;
-    border: 1px solid rgba(0,0,0,.125);
-    margin-right: 4px;
+	height: 300px;
+	padding: 10px;
+	line-height: 100px;
+	text-align: center;
+	/* width : 200px; */
+	display: block;
+	background-color: #fff;
+	outline: 0;
+	border: 1px solid rgba(0,0,0,.125);
+	margin-right: 4px;
 }
 
 .form-demo{

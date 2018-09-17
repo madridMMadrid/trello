@@ -1,101 +1,126 @@
-<template id="task-list">
-  <div>
-    <section class="tasks">
-      <h1>
-        Tasks 
-        <transition name="fade">
-          <small v-if="incomplete">({{ incomplete }})</small>
-        </transition>
+<template>
+  <div  id="task-list">
 
-      </h1>
-      <div class="tasks__new input-group">
-        <input type="text"
-        class="input-group-field"
-        v-model="newTask"
-        @keyup.enter="addTask"
-        placeholder="New task"
-        >
-        <span class="input-group-button">
-          <button @click="addTask" 
-          class="button"
-          >
-          <i class="fa fa-plus"></i> Add
-        </button>
-      </span>
-    </div>
+   <!--  <kanban :items='tree' @restore-collumn="">
+      <template slot="card" >
+        
+      </template>
+    </kanban> -->
 
-    <div class="tasks__clear button-group pull-right">
-      <button class="button warning small"
-      @click="clearCompleted"
+    <!-- test -->
+    <Container 
+        orientation="horizontal" 
+        @drop="onColumnDrop($event)"
+        drag-handle-selector=".column-drag-handle"
+        @drag-start="dragStart"
       >
-      <i class="fa fa-check"></i> Clear Completed
-    </button>
-    <button class="button alert small"
-    @click="clearAll"
-    >
-    <i class="fa fa-trash"></i> Clear All
-  </button>
-</div>
 
-<transition-group name="fade" tag="ul" class="tasks__list no-bullet">
-  <task-item v-for="(task, index) in tasks"
-  @remove="removeTask(index)"
-  @complete="completeTask(task)"
-  :task="task"
-  :key="index"
-  ></task-item>
-</transition-group>
-</section>
-</div>
+    <Draggable class="tasks" v-for="(col, index) in someTasks" :key="col.id">
+        <h5>
+          <div class="card-column-header">
+            <span class="column-drag-handle">&#x2630;</span>
+              {{ col.columnName }}
+            <transition name="fade">
+              <small v-if="incomplete">({{ col.taskBody.length }})</small>
+            </transition>
+            <span class="closed" @click="removeColumn(col.id)">X</span>
+          </div>
+        </h5>
+        <my-input :parentID="col.id" :index="index"></my-input>
+        <hr>
+        <Container >    
+          <task-item 
+            v-for="(task, index) in col.taskBody"  
+            :key="index"
+            :task="task"
+            :index="index"
+            :colid="col.id"
+          ></task-item>
+        </Container>
+
+    </Draggable>
+
+      <div class="tasks">
+        <div class="tasks__new input-group">
+          <input type="text"
+          class="input-group-field"
+          v-model="newColumn"
+          @keyup.enter="addColumn"
+          placeholder="Добавить колонку"
+          >
+          <span class="input-group-button">
+            <button 
+              @click="addColumn" 
+              class="button"
+              >
+              <i class="fa fa-plus"></i> Add Col
+            </button>
+          </span>
+        </div>
+      </div>
+  </Container>
+
+
+    
+
+  </div>
 </template>
 <script>
   import TaskItem from '~/components/TaskItem.vue'
+  import MyInput from '~/components/MyInput.vue'
+  import { Container, Draggable } from "vue-smooth-dnd"
+  import { applyDrag, generateItems } from "./utils"
+
   export default {
     components: {
-      TaskItem
+      TaskItem,
+      MyInput,
+      Container, 
+      Draggable
     },
-    props: {
-      tasks: { default: [] }
+    created(){
     },
     data() {
       return {
-        newTask: ''
+        className: '',
+        newColumn: '',
+        someTasksInner: this.$store.state.columnTasks[2]['taskBody'],
+        someTasks: this.$store.state.columnTasks
       };
     },
-
     computed: {
       incomplete() {
-        return this.tasks.filter(this.inProgress).length;
-      }
+        return this.someTasksInner.filter(this.inProgress).length;
+      },
     },
     methods: {
-      addTask() {
-        if (this.newTask) {
-          this.tasks.push({
-            title: this.newTask,
-            completed: false
-          });
-          this.newTask = '';
+      addColumn(){
+        if (this.newColumn) {
+          this.$store.commit('addColumn', {columnName: this.newColumn})
+          this.newColumn = '';
         }
       },
-      completeTask(task) {
-        task.completed = !task.completed;
+      onDrop: function(dropResult) {
+        this.someTasksInner = applyDrag(this.someTasksInner, dropResult);
       },
-      removeTask(index) {
-        this.tasks.splice(index, 1);
-      },
-      clearCompleted() {
-        this.tasks = this.tasks.filter(this.inProgress);
-      },
-      clearAll() {
-        this.tasks = [];
+      removeColumn(id){
+        this.$store.commit('removeColumn', {id: id})
       },
       inProgress(task) {
         return !this.isCompleted(task);
       },
       isCompleted(task) {
         return task.completed;
+      },
+      onColumnDrop: function(dropResult) {
+        this.someTasks = applyDrag(this.someTasks, dropResult);
+      },
+      dragStart: function(){
+        console.log('drag started');
+      },
+      log: function(...params){
+        console.log(...params);
       }
     }
-  }
+  };
 </script>
