@@ -47,8 +47,17 @@ export default {
 				this.myInput = '';
 			}
 		},
-		clearCompleted() {
+		clearCompleted(index) {
 			this.someTasksInner = this.someTasksInner.filter(this.inProgress);
+			for (var i = 0; i < this.someTasks.length; i++) {
+				if (this.someTasks[i].id == this.parentID) {
+					for (var j = 0; j < this.someTasks[i].taskBody.length; j++) {
+						if (this.someTasks[i].taskBody[j].completed) {
+							this.someTasks[i].taskBody = this.someTasks[i].taskBody.filter(this.inProgress)
+						}
+					}
+				}
+			}
 		},
 		clearAll(index) {
 			for (var i = 0; i < this.someTasks.length; i++) {
@@ -56,7 +65,6 @@ export default {
 					this.someTasks[i].taskBody.splice(index)
 				}
 			}
-			// this.someTasksInner.splice(index);
 		},
 		inProgress(task) {
 			return !this.isCompleted(task);
