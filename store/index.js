@@ -61,19 +61,32 @@ const createStore = () => {
         }
       },
       addColumn(state, res) {
+        console.log(state.columnTasks);
         for (var i = 0; i < state.columnTasks.length; i++) {
-              var number = [] 
-              number.push(state.columnTasks[i].id)
-              var max = Math.max(number)
+          var number = [] 
+          number.push(state.columnTasks[i].id)
+          var max = Math.max(number)
         }
 
-         state.columnTasks.push({
-                id: max + 1,
-                columnName: res.columnName,
-                taskBody: []
-            })
-            console.log(max);
+        state.columnTasks.push({
+          id: max + 1,
+          columnName: res.columnName,
+          taskBody: []
+        })
+
+            
+        console.log(max);
+      },
+      removeColumn(state, res){
+        // console.log('remove');
+        for (var i = 0; i < state.columnTasks.length; i++) {
+          if (state.columnTasks[i].id == res.id) {
+            // console.log(state.columnTasks[i]);
+            state.columnTasks.splice(i, 1)
+          }
+        }
       }
+       
     },
 
   })

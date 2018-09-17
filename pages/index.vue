@@ -50,28 +50,7 @@
 		toggleNav: function() {
     	  this.isNavOpen = !this.isNavOpen;
     	},
-	  onDrop: function(dropResult) {
-		this.items = applyDrag(this.items, dropResult);
-	  },
-	  onColumnDrop: function(dropResult) {
-		const scene = Object.assign({}, this.scene);
-		scene.children = applyDrag(scene.children, dropResult);
-		this.scene = scene;
-	  },
 
-	  onCardDrop: function(columnId, dropResult) {
-		if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-		  const scene = Object.assign({}, this.scene);
-		  const column = scene.children.filter(p => p.id === columnId)[0];
-		  const columnIndex = scene.children.indexOf(column);
-
-		  const newColumn = Object.assign({}, column);
-		  newColumn.children = applyDrag(newColumn.children, dropResult);
-		  scene.children.splice(columnIndex, 1, newColumn);
-
-		  this.scene = scene;
-		}
-	  },
 
 	  getCardPayload: function(columnId) {
 		return index => {
@@ -80,12 +59,7 @@
 		  ];
 		};
 	  },
-	  dragStart: function(){
-		console.log('drag started');
-	  },
-	  log: function(...params){
-		console.log(...params);
-	  }
+
 	},
 	computed: {
 	    navButtonClass: function() {
@@ -110,6 +84,13 @@ h1,
 button {
   font-family: 'Nunito', sans-serif;
 }
+span.closed {
+  float: right;
+}
+span.closed:hover {
+  cursor: pointer;
+}
+
 .container_wrap {
 	display: flex;
 	width: 100%;

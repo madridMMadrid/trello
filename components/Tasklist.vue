@@ -16,6 +16,7 @@
             <transition name="fade">
               <small v-if="incomplete">({{ col.taskBody.length }})</small>
             </transition>
+            <span class="closed" @click="removeColumn(col.id)">X</span>
           </div>
         </h5>
         <my-input :parentID="col.id" :index="index"></my-input>
@@ -31,7 +32,7 @@
         </Container>
 
     </Draggable>
-    
+
       <div class="tasks">
         <div class="tasks__new input-group">
           <input type="text"
@@ -94,6 +95,9 @@
       },
       onDrop: function(dropResult) {
         this.someTasksInner = applyDrag(this.someTasksInner, dropResult);
+      },
+      removeColumn(id){
+        this.$store.commit('removeColumn', {id: id})
       },
       inProgress(task) {
         return !this.isCompleted(task);
