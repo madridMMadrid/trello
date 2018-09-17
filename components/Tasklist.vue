@@ -1,6 +1,12 @@
 <template>
   <div  id="task-list">
 
+   <!--  <kanban :items='tree' @restore-collumn="">
+      <template slot="card" >
+        
+      </template>
+    </kanban> -->
+
     <Container 
         orientation="horizontal" 
         @drop="onColumnDrop($event)"
