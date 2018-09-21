@@ -43,21 +43,23 @@ const createStore = () => {
       addTask(state,res){
 
         for (var i = 0; i < state.columnTasks.length; i++) {
-          for (var j = 0; j < state.columnTasks[i].taskBody.length; j++) {
+          
+            for (var j = 0; j < state.columnTasks[i].taskBody.length; j++) {
               var number = [] 
               number.push(state.columnTasks[i].taskBody[j].id)
 
               var max = Math.max(number)
-          }
-          if (state.columnTasks[i].id == res.currentID) {
+            }
+            if (state.columnTasks[i].id == res.currentID) {
 
               state.columnTasks[i].taskBody.push({
 
                 id: max + 1,
                 title: res.title,
                 completed: false
-            })
-          }
+              })
+            }
+          
         }
       },
       addColumn(state, res) {
@@ -74,7 +76,7 @@ const createStore = () => {
           taskBody: []
         })
 
-            
+
         console.log(max);
       },
       removeColumn(state, res){
@@ -86,7 +88,7 @@ const createStore = () => {
           }
         }
       }
-       
+
     },
 
   })

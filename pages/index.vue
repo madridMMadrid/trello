@@ -39,7 +39,7 @@
 	data() {
 	  return {
 		tasks: this.$store.state.tasks,
-		isNavOpen: true,
+		isNavOpen: false,
 		// createColumn: this.$store.state.columnTest
 	  }
 	},

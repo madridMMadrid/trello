@@ -7,7 +7,6 @@
       </template>
     </kanban> -->
 
-    <!-- test -->
     <Container 
         orientation="horizontal" 
         @drop="onColumnDrop($event)"
@@ -59,10 +58,6 @@
         </div>
       </div>
   </Container>
-
-
-    
-
   </div>
 </template>
 <script>
@@ -92,6 +87,12 @@
       incomplete() {
         return this.someTasksInner.filter(this.inProgress).length;
       },
+      // someTasksInner() {
+      //   return this.$store.state.columnTasks[2]['taskBody']
+      // },
+      // someTasks() {
+      //   return this.$store.state.columnTasks
+      // }
     },
     methods: {
       addColumn(){
