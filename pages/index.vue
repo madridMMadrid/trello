@@ -11,8 +11,26 @@
   		<div class="header"></div>
   		<div class="demo">
   			<div class="card-scene">
-  				<div class="smooth-dnd-container horizontal">
-	  				<task-list :tasks="tasks"></task-list>  		
+  				<div class="d-flex flex-row">
+	  				<task-list></task-list>  		 
+            <div class="tasks">
+              <div class="tasks__new input-group">
+                <input type="text"
+                class="input-group-field"
+                v-model="newColumn"
+                @keyup.enter="addColumn"
+                placeholder="Добавить колонку"
+                >
+                <span class="input-group-button">
+                  <button 
+                    @click="addColumn" 
+                    class="button"
+                    >
+                    <i class="fa fa-plus"></i> Add Col
+                  </button>
+                </span>
+              </div>
+            </div>
   				</div>
   			</div>
   		</div>
@@ -38,9 +56,10 @@
 	},
 	data() {
 	  return {
-		tasks: this.$store.state.tasks,
-		isNavOpen: true,
-		// createColumn: this.$store.state.columnTest
+      newColumn: '',
+  		tasks: this.$store.state.tasks,
+  		isNavOpen: false,
+  		// createColumn: this.$store.state.columnTest
 	  }
 	},
 	created() {
@@ -48,18 +67,24 @@
 	},
 	methods: {
 		toggleNav: function() {
-    	  this.isNavOpen = !this.isNavOpen;
-    	},
+    	this.isNavOpen = !this.isNavOpen;
+    },
+    addColumn(){
+      if (this.newColumn) {
+        this.$store.commit('addColumn', {columnName: this.newColumn})
+      }
+      this.newColumn = '';
+      // this.someTasks = this.$store.state.columnTasks
+    },
 
 
-	  getCardPayload: function(columnId) {
-		return index => {
-		  return this.scene.children.filter(p => p.id === columnId)[0].children[
-		  index
-		  ];
-		};
+  	getCardPayload: function(columnId) {
+  		return index => {
+  		  return this.scene.children.filter(p => p.id === columnId)[0].children[
+  		  index
+  		  ];
+  		};
 	  },
-
 	},
 	computed: {
 	    navButtonClass: function() {
@@ -71,7 +96,7 @@
 	    headerClass: function() {
 	      return `header${this.isNavOpen ? " open" : " closed"}`;
 	    }
-  }
+  },
   };
 </script>
 
@@ -135,7 +160,7 @@ span.closed:hover {
   width: 100%;
   text-align: left;
   padding: 0.85em 2.25em 0.85em 1em;
-  background-color: rgba(0,0,0,0.05);
+  background-color: #fff;
   border: 1px solid rgba(0,0,0,0.1);
 }
 .tasks__item__toggle:hover {
@@ -583,7 +608,7 @@ input:last-child{
 }
 
 .card-scene{
-  padding: 50px;
+  padding: 20px;
   /* background-color: #fff; */
 }
 
@@ -591,7 +616,7 @@ input:last-child{
   width: 320px;
   padding: 10px;
   margin: 5px;
-  margin-right: 45px;
+  margin-right: 15px;
   background-color: #f3f3f3;
   box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
 }
@@ -600,8 +625,9 @@ input:last-child{
   margin: 5px;
   /* border: 1px solid #ccc; */
   background-color: white;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
-  padding: 10px;
+  /*box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);*/
+  /*padding: 10px;*/
+  position: relative;
 }
 
 .card-column-header{

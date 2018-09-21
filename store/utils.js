@@ -17,13 +17,6 @@ export const applyDrag = (arr, dragResult) => {
   return result
 };
 
-const task = [{
-  title: 'Make todo list',
-  completed: false
-}, {
-  title: 'Go skydiving',
-  completed: false
-}];
 
 export const className = () => {
       var classes = ['tasks__item__toggle'];

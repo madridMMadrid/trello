@@ -1,15 +1,23 @@
-<template>		        
-	<Draggable class="tasks__item" tag="li" >
-		<button 
-			:class="!task.completed ? 'tasks__item__toggle' : 'tasks__item__toggle tasks__item__toggle--completed'"
-			@click.self="completeTask(task)" >
-			{{ task.title }}
-		</button>
-		<button class="tasks__item__remove button alert pull-right"
-			@click="removeTask(index)">
-			<i class="fa fa-times"></i>
-		</button>
-	</Draggable>
+<template>		      
+	<!-- <div> -->
+		 <!-- <Container >     -->
+        <Draggable 
+          class="tasks__item" 
+          tag="li"
+          
+        >
+			<button 
+				:class="!task.completed ? 'tasks__item__toggle' : 'tasks__item__toggle tasks__item__toggle--completed'"
+				@click.self="completeTask(task)" >
+				{{ task.title }}
+			</button>
+			<button class="tasks__item__remove button alert pull-right"
+				@click="removeTask(index)">
+				<i class="fa fa-times"></i>
+			</button>
+		</Draggable>
+<!-- </Container> -->
+	<!-- </div> -->
 </template>
 <script>
 import { Container, Draggable } from "vue-smooth-dnd"
@@ -24,25 +32,21 @@ export default {
 
 	data() {
 		return {
-			someTasksInner: this.$store.state.columnTasks[2]['taskBody'],
+			// someTasksInner: this.$store.state.columnTasks[2]['taskBody'],
 			someTasks: this.$store.state.columnTasks
 		};
 	},
 	computed: {
-		className() {
-			var classes = ['tasks__item__toggle'];
-			if (this.completeTask) {
-				classes.push('tasks__item__toggle--completed');
-			}
-			return classes.join(' ');
-		},
+
 	},
 	created(){
+		console.log(this.task)
 	},
 	methods: {
-		onDrop: function(dropResult) {
-			this.someTasksInner = applyDrag(this.someTasksInner, dropResult);
-		},
+		// onDrop: function() {
+		// 	// this.someTasksInner = applyDrag(this.someTasksInner, dropResult);
+		// 	console.log('перенос состоялся')
+		// },
 
 		completeTask(tasks) {
 			tasks.completed = !tasks.completed;
@@ -54,6 +58,6 @@ export default {
 				}
 			}
 		},
-	}
+	},
 };
 </script>
