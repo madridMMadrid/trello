@@ -112,7 +112,7 @@ span.closed:hover {
 	display: flex;
 	width: 100%;
 	height: 100%;
-	position: fixed;
+	/*position: fixed;*/
 }
 #task-list {
 /*	display: flex;
@@ -175,8 +175,22 @@ span.closed:hover {
   right: 0;
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
+  margin: 0;
 }
 .tasks__item__remove i {
+  vertical-align: middle;
+}
+.tasks__item__edit {
+    position: absolute;
+    height: 100%;
+    width: 40px;
+    top: 50%;
+    right: 44px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    margin: 0;
+}
+.tasks__item__edit i {
   vertical-align: middle;
 }
 .nav-button{
@@ -601,6 +615,7 @@ input:last-child{
 
 .card-scene{
   padding: 20px;
+  height: 100vh;
   /* background-color: #fff; */
 }
 

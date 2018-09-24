@@ -1,4 +1,5 @@
 <template>
+  <div>
       <Container 
         orientation="horizontal" 
         @drop="onColumnDrop($event)"
@@ -34,6 +35,9 @@
                     @click.self="completeTask(card, column.id)" >
                     {{ card.data }}
                   </button>
+                  <el-button class="tasks__item__edit button alert pull-right" type="text" @click="outerVisible = true">
+                    <i class="fa fa-pencil-square-o"></i>
+                  </el-button>
                   <button class="tasks__item__remove button alert pull-right"
                     @click="removeTask(column.id,index)">
                     <i class="fa fa-times"></i>
@@ -44,22 +48,62 @@
           </div>
         </Draggable>
       </Container>
+      <el-dialog title="Outer Dialog" :visible.sync="outerVisible">
+          <div class="wrapper_info">
+            <p>test</p>
+          </div>
+          <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item
+              label="comment"
+              prop="text"
+              :rules="[
+                { required: true, message: 'Введите текст'},
+              ]"
+            >
+              <el-input type="age" v-model.number="numberValidateForm.text" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('numberValidateForm')">Отправить коментарий</el-button>
+              <el-button @click="resetForm('numberValidateForm')">Стереть</el-button>
+            </el-form-item>
+          </el-form>
+          <el-dialog
+              width="30%"
+              title="Внутренний диалог"
+              :visible.sync="innerVisible"
+              append-to-body>
+              <div class="inner_wrapper_info">
+                <p>some comment</p>
+              </div>
+          </el-dialog>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="outerVisible = false">Закрыть</el-button>
+            <el-button type="primary" @click="innerVisible = true">Открыть внутренний диалог</el-button>
+          </div>
+      </el-dialog>
+  </div>
 </template>
 <script>
 
   import MyInput from '~/components/MyInput.vue'
+  import taskInfo from '~/components/taskInfo.vue'
   import { Container, Draggable } from "vue-smooth-dnd"
   import { applyDrag, generateItems } from "./utils"
 
 
   export default {
-    components: { Container, Draggable, MyInput },
+    components: { Container, Draggable, MyInput, taskInfo },
     created(){
       
     },
     data() {
       return {
-        scene: this.$store.state.scene
+        scene: this.$store.state.scene,
+        outerVisible: false,
+        innerVisible: false,
+        numberValidateForm: {
+          text: ''
+        }
       };
     },
     computed: {
@@ -118,6 +162,19 @@
       removeTask(idColumn, index) {
         this.$store.commit('removeTask', {idColumn: idColumn, idTask: index})
       },
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
     },
   };
 </script>

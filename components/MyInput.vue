@@ -48,7 +48,6 @@ export default {
 			}
 		},
 		clearCompleted(index) {
-
 			for (var i = 0; i < this.scene.children.length; i++) {
 				if (this.scene.children[i].id == this.parentID) {
 					for (var j = 0; j < this.scene.children[i].children.length; j++) {
