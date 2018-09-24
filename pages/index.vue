@@ -41,29 +41,22 @@
 <script>
 
   import TaskList from '~/components/TaskList';
-  import TaskItem from '~/components/TaskItem';
-  import { Container, Draggable } from "vue-smooth-dnd";
-  import { applyDrag, generateItems } from "./utils";
 
 
   export default {
 	name: "Cards",
 	components: {
 	  TaskList,
-	  TaskItem,
-	  Container, 
-	  Draggable
 	},
 	data() {
 	  return {
       newColumn: '',
   		tasks: this.$store.state.tasks,
   		isNavOpen: false,
-  		// createColumn: this.$store.state.columnTest
 	  }
 	},
 	created() {
-	  // console.log('createColumn');
+
 	},
 	methods: {
 		toggleNav: function() {
@@ -74,7 +67,6 @@
         this.$store.commit('addColumn', {columnName: this.newColumn})
       }
       this.newColumn = '';
-      // this.someTasks = this.$store.state.columnTasks
     },
 
 

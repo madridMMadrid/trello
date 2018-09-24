@@ -31,7 +31,7 @@
                 <div class="card">
                   <button 
                     :class="!card.completed ? 'tasks__item__toggle' : 'tasks__item__toggle tasks__item__toggle--completed'"
-                    @click.self="completeTask(card)" >
+                    @click.self="completeTask(card, column.id)" >
                     {{ card.data }}
                   </button>
                   <button class="tasks__item__remove button alert pull-right"
@@ -75,6 +75,7 @@
         this.$store.commit('changeColumn', {changeColumn: this.scene})
       },
       onCardDrop: function(columnId, dropResult) {
+        console.log(dropResult)
         if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
           const scene = Object.assign({}, this.scene);
 
@@ -86,6 +87,7 @@
           scene.children.splice(columnIndex, 1, newColumn);
 
           this.scene = scene;
+          this.$store.commit('onCardDrop', {onCardDrop: this.scene})
         }
       },
       getCardPayload: function(columnId) {
@@ -110,7 +112,7 @@
       isCompleted(task) {
         return task.completed;
       },
-      completeTask(tasks) {
+      completeTask(tasks, id) {
         tasks.completed = !tasks.completed;
       },
       removeTask(idColumn, index) {
