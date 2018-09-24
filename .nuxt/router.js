@@ -3,8 +3,8 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const _d031e9b2 = () => import('../pages/utils.js' /* webpackChunkName: "pages/utils" */).then(m => m.default || m)
-const _2358b1ee = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
+const _706fba5c = () => import('../pages/utils.js' /* webpackChunkName: "pages/utils" */).then(m => m.default || m)
+const _26e0de74 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
 
 
@@ -66,12 +66,12 @@ export function createRouter () {
     routes: [
 		{
 			path: "/utils",
-			component: _d031e9b2,
+			component: _706fba5c,
 			name: "utils"
 		},
 		{
 			path: "/",
-			component: _2358b1ee,
+			component: _26e0de74,
 			name: "index"
 		}
     ],
