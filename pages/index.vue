@@ -11,7 +11,7 @@
   		<div class="header"></div>
   		<div class="demo">
   			<div class="card-scene">
-  				<div class="d-flex flex-row">
+  				<div class="d-flex">
 	  				<task-list></task-list>  		 
             <div class="tasks">
               <div class="tasks__new input-group">
@@ -107,7 +107,9 @@ span.closed {
 span.closed:hover {
   cursor: pointer;
 }
-
+.d-flex {
+  display: flex;
+}
 .container_wrap {
 	display: flex;
 	width: 100%;
@@ -131,11 +133,10 @@ span.closed:hover {
 .tasks {
   display: inline-block;
   vertical-align: top;
-  /*width: 100%;*/
+  height: 100%;
   max-width: 300px;
   padding: 1em;
   margin: 5px;
-  /*margin: 1em auto;*/
   overflow: auto;
   background-color: #fff;
   box-shadow: 0px 0.25rem 1rem rgba(0,0,0,0.25);

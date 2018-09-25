@@ -49,8 +49,37 @@
         </Draggable>
       </Container>
       <el-dialog title="Outer Dialog" :visible.sync="outerVisible">
-          <div class="wrapper_info">
-            <p>test</p>
+            <div class="wrapper_info">
+              <div class="wrapper">
+                <div class="sample">
+                  <form @submit.prevent="formSubmited = true" v-if="!formSubmited">
+                    <div class="progress">
+                      <div class="progress-bar" :style="progressWidth"></div>
+                    </div>
+                    <div>
+                      <app-input v-for="(item, index) in  info"
+                      :name="item.name"
+                      :value="item.value"
+                      :pattern="item.pattern"
+                      :key="index"
+                      @changedata="onChangeData(index, $event)"
+                      >
+                    </app-input>
+                  </div>
+                  <button class="btn btn-primary" :disabled="done < info.length">
+                    Send Data
+                  </button>
+                </form>
+                <div v-else>
+                  <table class="table table-bordered">
+                    <tr v-for="(item, index) in  info">
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.value }}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
           <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
             <el-form-item
@@ -87,12 +116,13 @@
 
   import MyInput from '~/components/MyInput.vue'
   import taskInfo from '~/components/taskInfo.vue'
+  import AppInput from '~/components/Input';
   import { Container, Draggable } from "vue-smooth-dnd"
   import { applyDrag, generateItems } from "./utils"
 
 
   export default {
-    components: { Container, Draggable, MyInput, taskInfo },
+    components: { Container, Draggable, MyInput, taskInfo, AppInput },
     created(){
       
     },
@@ -103,13 +133,48 @@
         innerVisible: false,
         numberValidateForm: {
           text: ''
-        }
+        },
+        info: [
+          {
+            name: 'Name',
+            value: '',
+            pattern: /^[a-zA-Z ]{2,30}$/
+          },
+          {
+            name: 'Phone',
+            value: '',
+            pattern: /^[0-9]{7,14}$/
+          },
+          {
+            name: 'Email',
+            value: '',
+            pattern: /.+/
+          },
+          {
+            name: 'Some Field 1',
+            value: '',
+            pattern: /.+/
+          },
+          {
+            name: 'Some Field 2',
+            value: '',
+            pattern: /.+/
+          }
+        ],
+        controls: [],
+        done: 0,
+        formSubmited: false
       };
     },
     computed: {
       incomplete() {
         return this.scene.children.filter(this.inProgress).length;
       },
+      progressWidth(){
+        return {
+          width: (this.done / this.info.length * 100) + '%'
+        }
+      }
     },
     methods: {
       onColumnDrop: function(dropResult) {
@@ -174,7 +239,56 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      onChangeData(index, data){
+        this.info[index].value = data.value;
+        this.controls[index] = data.valid;
+
+        let done = 0;
+
+        for(let i = 0; i < this.controls.length; i++){
+          if(this.controls[i]){
+            done++;
+          }
+        }
+
+        this.done = done;
+      }
+    },
+    created(){
+      for(let i = 0; i < this.info.length; i++){
+        this.controls.push(false);
       }
     },
   };
 </script>
+<style scoped>
+  .wrapper{
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  .progress {
+      height: 20px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+  }
+  .progress-bar {
+      float: left;
+      width: 0;
+      height: 100%;
+      font-size: 12px;
+      line-height: 20px;
+      color: #fff;
+      text-align: center;
+      background-color: #337ab7;
+      -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+      box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+      -webkit-transition: width .6s ease;
+      -o-transition: width .6s ease;
+      transition: width .6s ease;
+  }
+</style>
