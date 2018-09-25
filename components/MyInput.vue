@@ -2,10 +2,10 @@
 	<div>
 		<div class="tasks__new input-group">
 			<input type="text"
-			class="input-group-field"
-			v-model="myInput"
-			@keyup.enter="addTask"
-			placeholder="Добавить таск"
+				class="input-group-field"
+				v-model="myInput"
+				@keyup.enter="addTask"
+				placeholder="Добавить таск"
 			>
 			<span class="input-group-button">
 				<button @click="addTask" 
@@ -15,7 +15,7 @@
 				</button>
 			</span>
 		</div>
-		<div class="tasks__clear button-group pull-right">
+		<div class="tasks__clear button-group">
 			<button class="button warning small"
 				@click="clearCompleted"
 				>
@@ -35,8 +35,8 @@ export default {
 	data() {
 		return {
 			myInput: '',
-			someTasksInner: this.$store.state.columnTasks[2]['taskBody'],
-			someTasks: this.$store.state.columnTasks
+			scene: this.$store.state.scene,
+			sceneInner: this.$store.state.scene.children
 		}
 	},
 
@@ -48,30 +48,32 @@ export default {
 			}
 		},
 		clearCompleted(index) {
-			this.someTasksInner = this.someTasksInner.filter(this.inProgress);
-			for (var i = 0; i < this.someTasks.length; i++) {
-				if (this.someTasks[i].id == this.parentID) {
-					for (var j = 0; j < this.someTasks[i].taskBody.length; j++) {
-						if (this.someTasks[i].taskBody[j].completed) {
-							this.someTasks[i].taskBody = this.someTasks[i].taskBody.filter(this.inProgress)
+			for (var i = 0; i < this.scene.children.length; i++) {
+				if (this.scene.children[i].id == this.parentID) {
+					for (var j = 0; j < this.scene.children[i].children.length; j++) {
+						if (this.scene.children[i].children[j].completed) {
+							this.sceneInner[i].children = this.sceneInner[i].children.filter(this.inProgress)
+							this.$store.commit('clearCompleted', { itog: this.sceneInner[i].children, id: this.parentID})
 						}
 					}
 				}
 			}
 		},
-		clearAll(index) {
-			for (var i = 0; i < this.someTasks.length; i++) {
-				if (this.someTasks[i].id == this.parentID) {
-					this.someTasks[i].taskBody.splice(index)
-				}
-			}
-		},
 		inProgress(task) {
-			return !this.isCompleted(task);
+      	  return !this.isCompleted(task);
+      	},
+      	isCompleted(task) {
+      	  return task.completed;
+      	},
+		clearAll() {
+			this.$store.commit('clearAll', {indexClearAll: this.parentID})			
 		},
-		isCompleted(task) {
-			return task.completed;
-		}
+
 	}
 };	
 </script>
+<style>
+	.smooth-dnd-container.horizontal {
+		display: inline-block;
+	}
+</style>

@@ -1,96 +1,161 @@
 import Vuex from 'vuex'
 
-
 const createStore = () => {
   return new Vuex.Store({
+
     state: {
-      columnTasks: [{
-        id: 1,
-        columnName: 'test1',
-        taskBody: [{
-          id: 3,
-          title: 'Make todo list 1',
-          completed: false
-        }],
-      },{
-        id: 2,
-        columnName: 'test2',
-        taskBody: [{
-          id: 4,
-          title: 'Make todo list 2',
-          completed: false
+      scene: {
+        type: "container",
+        props: {
+          orientation: "horizontal"
         },
-        {
-          id: 7,
-          title: 'Make todo list 7',
-          completed: false
+        children: [{
+          id: 1,
+          type: "container",
+          name: "column_one",
+          props: {
+            orientation: "vertical",
+            className: "card-container"
+          },
+          children: [{
+            type: "task",
+            id: 11,
+            completed: false,
+            props: {
+              className: "card",
+              style: { backgroundColor: '#fff' }
+            },
+            data: 'some text 1'
+          }, {
+            type: "task",
+            id: 12,
+            completed: false,
+            props: {
+              className: "card",
+              style: { backgroundColor: '#fff' }
+            },
+              data: 'some text 2'
+          }],
+        },{
+          id: 2,
+          type: "container",
+          name: "column_two",
+          props: {
+            orientation: "vertical",
+            className: "card-container"
+          },
+          children: [{
+            type: "task2",
+            id: 21,
+            completed: false,
+            props: {
+              className: "card",
+              style: { backgroundColor: '#fff' }
+            },
+            data: 'column two task 1'
+          }, {
+            type: "task2",
+            id: 22,
+            completed: false,
+            props: {
+              className: "card",
+              style: { backgroundColor: '#fff' }
+            },
+            data: 'column two task 2'
+          }],
         }],
-      },{
-        id: 3,
-        columnName: 'test3',
-        taskBody: [{
-          id: 5,
-          title: 'Make todo list 3',
-          completed: false
-        }],
-      }],
+      },
     },
 
     mutations: {
-      increment (state) {
-        state.column++
-      },
       addTask(state,res){
+        let numberTask = [] 
+        for (var i = 0; i < state.scene.children.length; i++) {
 
-        for (var i = 0; i < state.columnTasks.length; i++) {
-          
-            for (var j = 0; j < state.columnTasks[i].taskBody.length; j++) {
-              var number = [] 
-              number.push(state.columnTasks[i].taskBody[j].id)
 
-              var max = Math.max(number)
-            }
-            if (state.columnTasks[i].id == res.currentID) {
+          for (var j = 0; j < state.scene.children[i].children.length; j++) {
+              numberTask.push(state.scene.children[i].children[j].id)
+          }
+          if (numberTask.length == 0) {
+            numberTask.push(0)
+          }
+          let maxTask = Math.max.apply(Math, numberTask)
 
-              state.columnTasks[i].taskBody.push({
-
-                id: max + 1,
-                title: res.title,
-                completed: false
+          if (state.scene.children[i].id == res.currentID) {
+              state.scene.children[i].children.push({
+                id: maxTask + 1,
+                type: res.title,
+                completed: false,
+                props: {
+                className: "card",
+                  style: { backgroundColor: '#fff' }
+                },
+                data: res.title
               })
-            }
-          
+          }
+
         }
       },
       addColumn(state, res) {
-        console.log(state.columnTasks);
-        for (var i = 0; i < state.columnTasks.length; i++) {
-          var number = [] 
-          number.push(state.columnTasks[i].id)
-          var max = Math.max(number)
+        let numberColumn = [] 
+        for (var i = 0; i < state.scene.children.length; i++) {
+          numberColumn.push(state.scene.children[i].id)
         }
-
-        state.columnTasks.push({
-          id: max + 1,
-          columnName: res.columnName,
-          taskBody: []
+        if (numberColumn.length == 0) {
+          numberColumn.push(0)
+        }
+        let maxColumn = Math.max.apply(Math, numberColumn)
+        state.scene.children.push({
+          id: maxColumn + 1,
+          type: "container",
+          name: res.columnName,
+          completed: false,
+          props: {
+            orientation: "vertical",
+            className: "card-container"
+          },
+          children: []
         })
 
-
-        console.log(max);
       },
       removeColumn(state, res){
-        // console.log('remove');
-        for (var i = 0; i < state.columnTasks.length; i++) {
-          if (state.columnTasks[i].id == res.id) {
-            // console.log(state.columnTasks[i]);
-            state.columnTasks.splice(i, 1)
+        for (var i = 0; i < state.scene.children.length; i++) {
+          if (state.scene.children[i].id == res.id) {
+            state.scene.children.splice(i, 1)
           }
         }
-      }
+
+      },
+      removeTask(state, res) {
+        for (var i = 0; i < state.scene.children.length; i++) {
+          if (state.scene.children[i].id == res.idColumn) {
+            state.scene.children[i].children.splice(res.idTask, 1)
+          }
+        }
+      },
+      changeColumn(state, res){
+        state.scene = res.changeColumn
+      },
+      onCardDrop(state, res){
+        state.scene = res.onCardDrop
+      },
+      clearAll(state, res){
+        for (var i = 0; i < state.scene.children.length; i++) {
+          if (state.scene.children[i].id == res.indexClearAll) {
+            state.scene.children[i].children.splice(0)
+          }
+        }
+      },
+      clearCompleted(state, res){
+        console.log(res)
+        for (var i = 0; i < state.scene.children.length; i++) {
+          if (state.scene.children[i].id == res.id) {
+            state.scene.children[i].children = res.itog
+          }
+        }
+      },
 
     },
-
   })
 }
 

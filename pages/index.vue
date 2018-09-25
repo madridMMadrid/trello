@@ -11,8 +11,26 @@
   		<div class="header"></div>
   		<div class="demo">
   			<div class="card-scene">
-  				<div class="smooth-dnd-container horizontal">
-	  				<task-list :tasks="tasks"></task-list>  		
+  				<div class="d-flex">
+	  				<task-list></task-list>  		 
+            <div class="tasks">
+              <div class="tasks__new input-group">
+                <input type="text"
+                class="input-group-field"
+                v-model="newColumn"
+                @keyup.enter="addColumn"
+                placeholder="Добавить колонку"
+                >
+                <span class="input-group-button">
+                  <button 
+                    @click="addColumn" 
+                    class="button"
+                    >
+                    <i class="fa fa-plus"></i> Add Col
+                  </button>
+                </span>
+              </div>
+            </div>
   				</div>
   			</div>
   		</div>
@@ -23,43 +41,43 @@
 <script>
 
   import TaskList from '~/components/TaskList';
-  import TaskItem from '~/components/TaskItem';
-  import { Container, Draggable } from "vue-smooth-dnd";
-  import { applyDrag, generateItems } from "./utils";
 
 
   export default {
 	name: "Cards",
 	components: {
 	  TaskList,
-	  TaskItem,
-	  Container, 
-	  Draggable
 	},
 	data() {
 	  return {
-		tasks: this.$store.state.tasks,
-		isNavOpen: false,
-		// createColumn: this.$store.state.columnTest
+      newColumn: '',
+  		tasks: this.$store.state.tasks,
+  		isNavOpen: false,
+
 	  }
 	},
 	created() {
-	  // console.log('createColumn');
+
 	},
 	methods: {
 		toggleNav: function() {
-    	  this.isNavOpen = !this.isNavOpen;
-    	},
+    	this.isNavOpen = !this.isNavOpen;
+    },
+    addColumn(){
+      if (this.newColumn) {
+        this.$store.commit('addColumn', {columnName: this.newColumn})
+      }
+      this.newColumn = '';
+    },
 
 
-	  getCardPayload: function(columnId) {
-		return index => {
-		  return this.scene.children.filter(p => p.id === columnId)[0].children[
-		  index
-		  ];
-		};
+  	getCardPayload: function(columnId) {
+  		return index => {
+  		  return this.scene.children.filter(p => p.id === columnId)[0].children[
+  		  index
+  		  ];
+  		};
 	  },
-
 	},
 	computed: {
 	    navButtonClass: function() {
@@ -71,7 +89,7 @@
 	    headerClass: function() {
 	      return `header${this.isNavOpen ? " open" : " closed"}`;
 	    }
-  }
+  },
   };
 </script>
 
@@ -90,12 +108,14 @@ span.closed {
 span.closed:hover {
   cursor: pointer;
 }
-
+.d-flex {
+  display: flex;
+}
 .container_wrap {
 	display: flex;
 	width: 100%;
 	height: 100%;
-	position: fixed;
+	/*position: fixed;*/
 }
 #task-list {
 /*	display: flex;
@@ -114,11 +134,10 @@ span.closed:hover {
 .tasks {
   display: inline-block;
   vertical-align: top;
-  /*width: 100%;*/
+  height: 100%;
   max-width: 300px;
   padding: 1em;
   margin: 5px;
-  /*margin: 1em auto;*/
   overflow: auto;
   background-color: #fff;
   box-shadow: 0px 0.25rem 1rem rgba(0,0,0,0.25);
@@ -135,7 +154,7 @@ span.closed:hover {
   width: 100%;
   text-align: left;
   padding: 0.85em 2.25em 0.85em 1em;
-  background-color: rgba(0,0,0,0.05);
+  background-color: #fff;
   border: 1px solid rgba(0,0,0,0.1);
 }
 .tasks__item__toggle:hover {
@@ -158,8 +177,22 @@ span.closed:hover {
   right: 0;
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
+  margin: 0;
 }
 .tasks__item__remove i {
+  vertical-align: middle;
+}
+.tasks__item__edit {
+    position: absolute;
+    height: 100%;
+    width: 40px;
+    top: 50%;
+    right: 44px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    margin: 0;
+}
+.tasks__item__edit i {
   vertical-align: middle;
 }
 .nav-button{
@@ -583,7 +616,8 @@ input:last-child{
 }
 
 .card-scene{
-  padding: 50px;
+  padding: 20px;
+  height: 100vh;
   /* background-color: #fff; */
 }
 
@@ -591,7 +625,7 @@ input:last-child{
   width: 320px;
   padding: 10px;
   margin: 5px;
-  margin-right: 45px;
+  margin-right: 15px;
   background-color: #f3f3f3;
   box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
 }
@@ -600,8 +634,9 @@ input:last-child{
   margin: 5px;
   /* border: 1px solid #ccc; */
   background-color: white;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
-  padding: 10px;
+  /*box-shadow: 0 1px 1px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);*/
+  /*padding: 10px;*/
+  position: relative;
 }
 
 .card-column-header{
