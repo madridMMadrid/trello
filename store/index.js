@@ -72,6 +72,7 @@ const createStore = () => {
         let numberTask = [] 
         for (var i = 0; i < state.scene.children.length; i++) {
 
+
           for (var j = 0; j < state.scene.children[i].children.length; j++) {
               numberTask.push(state.scene.children[i].children[j].id)
           }
@@ -92,6 +93,7 @@ const createStore = () => {
                 data: res.title
               })
           }
+
         }
       },
       addColumn(state, res) {
@@ -114,6 +116,7 @@ const createStore = () => {
           },
           children: []
         })
+
       },
       removeColumn(state, res){
         for (var i = 0; i < state.scene.children.length; i++) {
@@ -121,6 +124,7 @@ const createStore = () => {
             state.scene.children.splice(i, 1)
           }
         }
+
       },
       removeTask(state, res) {
         for (var i = 0; i < state.scene.children.length; i++) {
@@ -150,6 +154,7 @@ const createStore = () => {
           }
         }
       },
+
     },
   })
 }

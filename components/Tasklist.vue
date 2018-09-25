@@ -1,6 +1,8 @@
 <template>
+
   <div>
       <Container 
+
         orientation="horizontal" 
         @drop="onColumnDrop($event)"
         drag-handle-selector=".column-drag-handle"
@@ -46,6 +48,7 @@
               </Draggable>
             </Container>
           </div>
+
         </Draggable>
       </Container>
       <el-dialog title="Outer Dialog" :visible.sync="outerVisible">
@@ -110,6 +113,7 @@
             <el-button type="primary" @click="innerVisible = true">Открыть внутренний диалог</el-button>
           </div>
       </el-dialog>
+
   </div>
 </template>
 <script>
@@ -170,11 +174,13 @@
       incomplete() {
         return this.scene.children.filter(this.inProgress).length;
       },
+
       progressWidth(){
         return {
           width: (this.done / this.info.length * 100) + '%'
         }
       }
+
     },
     methods: {
       onColumnDrop: function(dropResult) {

@@ -7,6 +7,7 @@ const _26e0de74 = () => import('../pages/index.vue' /* webpackChunkName: "pages/
 
 
 
+
 if (process.client) {
   window.history.scrollRestoration = 'manual'
 }
@@ -65,7 +66,7 @@ export function createRouter () {
     routes: [
 		{
 			path: "/",
-			component: _26e0de74,
+			component: _c6e52f62,
 			name: "index"
 		}
     ],

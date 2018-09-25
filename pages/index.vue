@@ -53,6 +53,7 @@
       newColumn: '',
   		tasks: this.$store.state.tasks,
   		isNavOpen: false,
+
 	  }
 	},
 	created() {
