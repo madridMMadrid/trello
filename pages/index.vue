@@ -11,7 +11,7 @@
   		<div class="header"></div>
   		<div class="demo">
   			<div class="card-scene">
-  				<div class="d-flex flex-row">
+  				<div class="d-flex">
 	  				<task-list></task-list>  		 
             <div class="tasks">
               <div class="tasks__new input-group">
@@ -41,29 +41,22 @@
 <script>
 
   import TaskList from '~/components/TaskList';
-  import TaskItem from '~/components/TaskItem';
-  import { Container, Draggable } from "vue-smooth-dnd";
-  import { applyDrag, generateItems } from "./utils";
 
 
   export default {
 	name: "Cards",
 	components: {
 	  TaskList,
-	  TaskItem,
-	  Container, 
-	  Draggable
 	},
 	data() {
 	  return {
       newColumn: '',
   		tasks: this.$store.state.tasks,
   		isNavOpen: false,
-  		// createColumn: this.$store.state.columnTest
 	  }
 	},
 	created() {
-	  // console.log('createColumn');
+
 	},
 	methods: {
 		toggleNav: function() {
@@ -74,7 +67,6 @@
         this.$store.commit('addColumn', {columnName: this.newColumn})
       }
       this.newColumn = '';
-      // this.someTasks = this.$store.state.columnTasks
     },
 
 
@@ -115,12 +107,14 @@ span.closed {
 span.closed:hover {
   cursor: pointer;
 }
-
+.d-flex {
+  display: flex;
+}
 .container_wrap {
 	display: flex;
 	width: 100%;
 	height: 100%;
-	position: fixed;
+	/*position: fixed;*/
 }
 #task-list {
 /*	display: flex;
@@ -139,11 +133,10 @@ span.closed:hover {
 .tasks {
   display: inline-block;
   vertical-align: top;
-  /*width: 100%;*/
+  height: 100%;
   max-width: 300px;
   padding: 1em;
   margin: 5px;
-  /*margin: 1em auto;*/
   overflow: auto;
   background-color: #fff;
   box-shadow: 0px 0.25rem 1rem rgba(0,0,0,0.25);
@@ -183,8 +176,22 @@ span.closed:hover {
   right: 0;
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
+  margin: 0;
 }
 .tasks__item__remove i {
+  vertical-align: middle;
+}
+.tasks__item__edit {
+    position: absolute;
+    height: 100%;
+    width: 40px;
+    top: 50%;
+    right: 44px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    margin: 0;
+}
+.tasks__item__edit i {
   vertical-align: middle;
 }
 .nav-button{
@@ -609,6 +616,7 @@ input:last-child{
 
 .card-scene{
   padding: 20px;
+  height: 100vh;
   /* background-color: #fff; */
 }
 

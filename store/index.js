@@ -122,20 +122,35 @@ const createStore = () => {
           }
         }
       },
-      changeColumn(state, res){
-        state.scene = res.changeColumn
-      },
       removeTask(state, res) {
         for (var i = 0; i < state.scene.children.length; i++) {
           if (state.scene.children[i].id == res.idColumn) {
             state.scene.children[i].children.splice(res.idTask, 1)
           }
         }
-      }
+      },
+      changeColumn(state, res){
+        state.scene = res.changeColumn
+      },
+      onCardDrop(state, res){
+        state.scene = res.onCardDrop
+      },
+      clearAll(state, res){
+        for (var i = 0; i < state.scene.children.length; i++) {
+          if (state.scene.children[i].id == res.indexClearAll) {
+            state.scene.children[i].children.splice(0)
+          }
+        }
+      },
+      clearCompleted(state, res){
+        console.log(res)
+        for (var i = 0; i < state.scene.children.length; i++) {
+          if (state.scene.children[i].id == res.id) {
+            state.scene.children[i].children = res.itog
+          }
+        }
+      },
     },
-
-  
-
   })
 }
 

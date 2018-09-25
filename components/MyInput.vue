@@ -2,10 +2,10 @@
 	<div>
 		<div class="tasks__new input-group">
 			<input type="text"
-			class="input-group-field"
-			v-model="myInput"
-			@keyup.enter="addTask"
-			placeholder="Добавить таск"
+				class="input-group-field"
+				v-model="myInput"
+				@keyup.enter="addTask"
+				placeholder="Добавить таск"
 			>
 			<span class="input-group-button">
 				<button @click="addTask" 
@@ -53,6 +53,7 @@ export default {
 					for (var j = 0; j < this.scene.children[i].children.length; j++) {
 						if (this.scene.children[i].children[j].completed) {
 							this.sceneInner[i].children = this.sceneInner[i].children.filter(this.inProgress)
+							this.$store.commit('clearCompleted', { itog: this.sceneInner[i].children, id: this.parentID})
 						}
 					}
 				}
@@ -64,12 +65,8 @@ export default {
       	isCompleted(task) {
       	  return task.completed;
       	},
-		clearAll(index) {
-			for (var i = 0; i < this.scene.children.length; i++) {
-				if (this.scene.children[i].id == this.parentID) {
-					this.scene.children[i].children.splice(index)
-				}
-			}
+		clearAll() {
+			this.$store.commit('clearAll', {indexClearAll: this.parentID})			
 		},
 
 	}
