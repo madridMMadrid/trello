@@ -44,7 +44,7 @@ export default {
 		addTask(){
 			if (this.myInput) {
 				this.$store.commit('addTask', {currentID: this.parentID, title: this.myInput, completed: false})
-				this.myInput = '';
+				this.myInput = ''
 			}
 		},
 		clearCompleted(index) {

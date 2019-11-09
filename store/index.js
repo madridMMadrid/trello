@@ -1,4 +1,9 @@
+import Vue from 'vue'
 import Vuex from 'vuex'
+
+// переделываем на localstorage
+Vue.use(Vuex)
+
 
 const createStore = () => {
   return new Vuex.Store({
@@ -9,65 +14,28 @@ const createStore = () => {
         props: {
           orientation: "horizontal"
         },
-        children: [{
-          id: 1,
-          type: "container",
-          name: "column_one",
-          props: {
-            orientation: "vertical",
-            className: "card-container"
-          },
-          children: [{
-            type: "task",
-            id: 11,
-            completed: false,
-            props: {
-              className: "card",
-              style: { backgroundColor: '#fff' }
-            },
-            data: 'some text 1'
-          }, {
-            type: "task",
-            id: 12,
-            completed: false,
-            props: {
-              className: "card",
-              style: { backgroundColor: '#fff' }
-            },
-              data: 'some text 2'
-          }],
-        },{
-          id: 2,
-          type: "container",
-          name: "column_two",
-          props: {
-            orientation: "vertical",
-            className: "card-container"
-          },
-          children: [{
-            type: "task2",
-            id: 21,
-            completed: false,
-            props: {
-              className: "card",
-              style: { backgroundColor: '#fff' }
-            },
-            data: 'column two task 1'
-          }, {
-            type: "task2",
-            id: 22,
-            completed: false,
-            props: {
-              className: "card",
-              style: { backgroundColor: '#fff' }
-            },
-            data: 'column two task 2'
-          }],
-        }],
+        children: [],
       },
     },
 
+    getters: {
+      scene(state) {
+        console.log('getters')
+        return state.scene
+      }
+    },
+    actions: {
+      async getList (context) {
+        const child = await JSON.parse(localStorage.getItem("authToken"))
+        console.log(child, 'смотрим что в child')
+        context.commit('getList', child.data)
+      }
+    },
+
     mutations: {
+      getList (state, children) {
+        state.scene = children
+      },
       addTask(state,res){
         let numberTask = [] 
         for (var i = 0; i < state.scene.children.length; i++) {
@@ -116,7 +84,7 @@ const createStore = () => {
           },
           children: []
         })
-
+        localStorage.setItem("authToken", JSON.stringify(state))
       },
       removeColumn(state, res){
         for (var i = 0; i < state.scene.children.length; i++) {
@@ -156,7 +124,38 @@ const createStore = () => {
       },
 
     },
+
   })
 }
 
 export default createStore
+
+
+//   {
+        //   id: 2,
+        //   type: "container",
+        //   name: "column_two",
+        //   props: {
+        //     orientation: "vertical",
+        //     className: "card-container"
+        //   },
+        //   children: [{
+        //     type: "task2",
+        //     id: 21,
+        //     completed: false,
+        //     props: {
+        //       className: "card",
+        //       style: { backgroundColor: '#fff' }
+        //     },
+        //     data: 'column two task 1'
+        //   }, {
+        //     type: "task2",
+        //     id: 22,
+        //     completed: false,
+        //     props: {
+        //       className: "card",
+        //       style: { backgroundColor: '#fff' }
+        //     },
+        //     data: 'column two task 2'
+        //   }],
+        // }

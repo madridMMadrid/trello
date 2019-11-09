@@ -51,13 +51,11 @@
 	data() {
 	  return {
       newColumn: '',
-  		tasks: this.$store.state.tasks,
   		isNavOpen: false,
-
 	  }
 	},
 	created() {
-
+    
 	},
 	methods: {
 		toggleNav: function() {
@@ -68,6 +66,7 @@
         this.$store.commit('addColumn', {columnName: this.newColumn})
       }
       this.newColumn = '';
+      // console.log(JSON.parse(localStorage.getItem("authToken", "children")))
     },
 
 

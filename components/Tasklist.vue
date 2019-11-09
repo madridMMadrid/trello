@@ -123,13 +123,18 @@
   import AppInput from '~/components/Input';
   import { Container, Draggable } from "vue-smooth-dnd"
   import { applyDrag, generateItems } from "./utils"
-
+  const STORAGE_KEY = 'todo-storage'
 
   export default {
-    components: { Container, Draggable, MyInput, taskInfo, AppInput },
-    created(){
-      
+
+    getListChildren({store}) {
+      store.dispatch('getList')
+      return {
+        children: store.getters.children
+      }
     },
+    
+    components: { Container, Draggable, MyInput, taskInfo, AppInput },
     data() {
       return {
         scene: this.$store.state.scene,
@@ -236,7 +241,6 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
           } else {
             console.log('error submit!!');
             return false;
@@ -259,12 +263,21 @@
         }
 
         this.done = done;
+      },
+      storeToken(token){
+        if(process.browser){
+          // this.scene = JSON.parse(localStorage.getItem("authToken") || '[]');
+          localStorage.setItem("authToken", JSON.stringify(this.scene));
+        }
       }
     },
     created(){
       for(let i = 0; i < this.info.length; i++){
         this.controls.push(false);
       }
+      
+      this.storeToken()
+				// this.$store.commit('addTask', {currentID: this.parentID, title: this.myInput, completed: false})
     },
   };
 </script>

@@ -5,8 +5,8 @@
         </span>
         <input type="text" 
         	   class="form-control"
-			   :value="value"
-			   @input="onInput"
+			   		:value="value"
+			   		@input="onInput"
         	   >
     </div>
 </template>
@@ -19,6 +19,7 @@
 				activated: this.value != ''
 			}
 		},
+
 		computed: {
 			validClass(){
 				return this.pattern.test(this.value) ? 
