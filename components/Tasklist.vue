@@ -5,7 +5,7 @@
 
         orientation="horizontal" 
         @drop="onColumnDrop($event)"
-        drag-handle-selector=".column-drag-handle"
+        drag-handle-selector=".card-column-header"
         @drag-start="dragStart"
       >
         <Draggable v-for="(column, index) in scene.children" :key="column.id">
@@ -266,18 +266,19 @@
       },
       storeToken(token){
         if(process.browser){
-          // this.scene = JSON.parse(localStorage.getItem("authToken") || '[]');
-          localStorage.setItem("authToken", JSON.stringify(this.scene));
+          if (!localStorage.getItem("authToken")) {
+            localStorage.setItem("authToken", JSON.stringify(this.scene));
+          }
         }
       }
     },
     created(){
+      
       for(let i = 0; i < this.info.length; i++){
         this.controls.push(false);
       }
       
       this.storeToken()
-				// this.$store.commit('addTask', {currentID: this.parentID, title: this.myInput, completed: false})
     },
   };
 </script>
