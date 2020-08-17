@@ -12,8 +12,8 @@ import { setContext, getLocation, getRouteData } from './utils'
 import { createStore } from './store.js'
 
 /* Plugins */
-import nuxt_plugin_elementui_69306e1c from 'nuxt_plugin_elementui_69306e1c' // Source: ../plugins/element-ui
-import nuxt_plugin_vuescroll_939a27ea from 'nuxt_plugin_vuescroll_939a27ea' // Source: ../plugins/vue-scroll
+import nuxt_plugin_elementui_69306e1c from 'nuxt_plugin_elementui_69306e1c' // Source: ..\\plugins\\element-ui
+import nuxt_plugin_vuescroll_939a27ea from 'nuxt_plugin_vuescroll_939a27ea' // Source: ..\\plugins\\vue-scroll
 
 
 // Component: <no-ssr>
